@@ -18,11 +18,11 @@ document.getElementById("calculate").addEventListener("click", function () {
 
     switch (pricingMethod) {
         case "black-scholes-discrete":
-            // Calculate option price using Black-Scholes (Discrete)
-            optionPrice = calculateBlackScholesDiscrete(optionType, stockPrice, strikePrice, timeToExpiration, volatility, interestRate, dividend);
+            // Calculate option price and Greeks using Black-Scholes (Discrete)
+            [optionPrice, delta, gamma, theta, vega, rho] = calculateBlackScholesDiscrete(optionType, stockPrice, strikePrice, timeToExpiration, volatility, interestRate, dividend);
             break;
         case "black-scholes-continuous":
-            // Calculate option price using Black-Scholes (Continuous)
+            // Calculate option price and Greeks using Black-Scholes (Continuous)
             [optionPrice, delta, gamma, theta, vega, rho] = calculateBlackScholesContinuous(optionType, stockPrice, strikePrice, timeToExpiration, volatility, interestRate, dividend);
             break;
         default:
@@ -59,17 +59,47 @@ function normDist(x) {
 }
 
 function calculateBlackScholesDiscrete(optionType, stockPrice, strikePrice, timeToExpiration, volatility, interestRate, dividend) {
-    // Calculate Black-Scholes (Discrete) option price
-    const d1 = (Math.log(stockPrice / strikePrice) + ((interestRate - dividend + (Math.pow(volatility, 2) / 2)) * timeToExpiration)) / (volatility * Math.sqrt(timeToExpiration));
-    const d2 = d1 - volatility * Math.sqrt(timeToExpiration);
+    // Calculate Black-Scholes (Discrete) option price, Delta, Gamma, Theta, Vega, and Rho
+    const n = Math.floor(timeToExpiration); // Number of time intervals
+    const deltaT = 1.0 / 365.0; // Length of each time interval (assuming daily intervals)
+    const discountFactor = Math.exp(-interestRate * deltaT);
+    
+    let optionPrice = 0;
+    let delta = 0;
+    let gamma = 0;
+    let theta = 0;
+    let vega = 0;
+    let rho = 0;
 
-    if (optionType === "call") {
-        return stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(d1) - strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(d2);
-    } else if (optionType === "put") {
-        return strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(-d2) - stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(-d1);
-    } else {
-        return "Invalid option type";
+    for (let i = 0; i <= n; i++) {
+        const t = i * deltaT;
+        const d1 = (Math.log(stockPrice / strikePrice) + ((interestRate - dividend + (Math.pow(volatility, 2) / 2)) * t)) / (volatility * Math.sqrt(t));
+        const d2 = d1 - volatility * Math.sqrt(t);
+
+        const optionValue = (optionType === "call") ? stockPrice * Math.exp(-dividend * t) * normDist(d1) - strikePrice * Math.exp(-interestRate * t) * normDist(d2)
+            : strikePrice * Math.exp(-interestRate * t) * normDist(-d2) - stockPrice * Math.exp(-dividend * t) * normDist(-d1);
+
+        optionPrice += optionValue;
+
+        // Calculate Greeks
+        const nd1 = normDist(d1);
+        const nd2 = normDist(d2);
+
+        delta += (optionType === "call") ? Math.exp(-dividend * t) * nd1 : -Math.exp(-dividend * t) * nd1;
+        gamma += (nd1 * Math.exp(-dividend * t)) / (stockPrice * volatility * Math.sqrt(t));
+        theta -= (0.5 * stockPrice * volatility * Math.exp(-dividend * t) * nd1) / Math.sqrt(t) - (interestRate * strikePrice * Math.exp(-interestRate * t) * nd2) + (dividend * stockPrice * Math.exp(-dividend * t) * nd1);
+        vega += stockPrice * Math.exp(-dividend * t) * Math.sqrt(t) * nd1;
+        rho += (optionType === "call") ? strikePrice * t * Math.exp(-interestRate * t) * nd2 : -strikePrice * t * Math.exp(-interestRate * t) * nd2;
     }
+
+    optionPrice *= discountFactor;
+    delta *= discountFactor;
+    gamma *= discountFactor;
+    theta *= discountFactor;
+    vega *= discountFactor;
+    rho *= discountFactor;
+
+    return [optionPrice, delta, gamma, theta, vega, rho];
 }
 
 function calculateBlackScholesContinuous(optionType, stockPrice, strikePrice, timeToExpiration, volatility, interestRate, dividend) {
@@ -88,7 +118,7 @@ function calculateBlackScholesContinuous(optionType, stockPrice, strikePrice, ti
         optionPrice = stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(d1) - strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(d2);
         delta = Math.exp(-dividend * timeToExpiration) * normDist(d1);
         gamma = Math.exp(-dividend * timeToExpiration) * normDist(d1) / (stockPrice * volatility * Math.sqrt(timeToExpiration));
-        theta = (-stockPrice * volatility * Math.exp(-dividend * timeToExpiration) * normDist(d1)) / (2 * Math.sqrt(timeToExpiration)) - interestRate * strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(d2) + dividend * stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(d1);
+        theta = (-0.5 * stockPrice * volatility * Math.exp(-dividend * timeToExpiration) * normDist(d1)) / Math.sqrt(timeToExpiration) - interestRate * strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(d2) + dividend * stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(d1);
         vega = stockPrice * Math.exp(-dividend * timeToExpiration) * Math.sqrt(timeToExpiration) * normDist(d1);
         rho = strikePrice * timeToExpiration * Math.exp(-interestRate * timeToExpiration) * normDist(d2);
     } else if (optionType === "put") {
@@ -98,7 +128,7 @@ function calculateBlackScholesContinuous(optionType, stockPrice, strikePrice, ti
         optionPrice = strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(negD2) - stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(negD1);
         delta = -Math.exp(-dividend * timeToExpiration) * normDist(negD1);
         gamma = Math.exp(-dividend * timeToExpiration) * normDist(negD1) / (stockPrice * volatility * Math.sqrt(timeToExpiration));
-        theta = (-stockPrice * volatility * Math.exp(-dividend * timeToExpiration) * normDist(negD1)) / (2 * Math.sqrt(timeToExpiration)) + interestRate * strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(negD2) - dividend * stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(negD1);
+        theta = (-0.5 * stockPrice * volatility * Math.exp(-dividend * timeToExpiration) * normDist(negD1)) / Math.sqrt(timeToExpiration) + interestRate * strikePrice * Math.exp(-interestRate * timeToExpiration) * normDist(negD2) - dividend * stockPrice * Math.exp(-dividend * timeToExpiration) * normDist(negD1);
         vega = stockPrice * Math.exp(-dividend * timeToExpiration) * Math.sqrt(timeToExpiration) * normDist(negD1);
         rho = -strikePrice * timeToExpiration * Math.exp(-interestRate * timeToExpiration) * normDist(negD2);
     } else {
