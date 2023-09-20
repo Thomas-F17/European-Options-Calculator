@@ -1,3 +1,5 @@
+/* Math-themed CSS styles */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -11,11 +13,11 @@ body {
 
 .calculator {
     background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 2px solid #007bff; /* Blue border */
+    border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    text-align: left; /* Text alignment */
     max-width: 400px;
     margin: 0 auto;
 }
@@ -23,23 +25,24 @@ body {
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #007bff; /* Blue text color */
 }
 
 .input-group {
-    margin-bottom: 10px;
-    text-align: left;
+    margin-bottom: 15px;
 }
 
 label {
     font-weight: bold;
     margin-right: 5px;
+    color: #333; /* Dark text color */
 }
 
 input,
 select {
-    padding: 5px;
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
     width: 100%;
 }
 
@@ -66,8 +69,10 @@ button:hover {
 
 p {
     font-size: 18px;
+    color: #333; /* Dark text color */
 }
 
 span {
     font-weight: bold;
+    color: #007bff; /* Blue text color */
 }
