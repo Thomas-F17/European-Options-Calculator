@@ -1,4 +1,4 @@
-/* Math-themed CSS styles */
+/* Add your CSS styles here */
 
 body {
     font-family: Arial, sans-serif;
@@ -13,36 +13,43 @@ body {
 
 .calculator {
     background-color: #fff;
-    border: 2px solid #007bff; /* Blue border */
-    border-radius: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    text-align: left; /* Text alignment */
-    max-width: 400px;
+    text-align: center;
+    max-width: 800px; /* Increase the max-width for a wider layout */
     margin: 0 auto;
+    display: flex;
+    flex-direction: row; /* Display inputs and outputs side by side */
 }
 
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #007bff; /* Blue text color */
+    width: 100%; /* Full width for the title */
+}
+
+.input-section {
+    flex: 1; /* Inputs take up 50% of the width */
+    padding-right: 20px; /* Add some spacing between inputs and outputs */
 }
 
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    text-align: left;
 }
 
 label {
     font-weight: bold;
     margin-right: 5px;
-    color: #333; /* Dark text color */
 }
 
 input,
 select {
-    padding: 8px;
+    padding: 5px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 3px;
     width: 100%;
 }
 
@@ -62,6 +69,12 @@ button:hover {
     background-color: #0056b3;
 }
 
+.output-section {
+    flex: 1; /* Outputs take up 50% of the width */
+    text-align: left;
+    padding-left: 20px; /* Add some spacing between inputs and outputs */
+}
+
 .results {
     margin-top: 20px;
     text-align: left;
@@ -69,10 +82,8 @@ button:hover {
 
 p {
     font-size: 18px;
-    color: #333; /* Dark text color */
 }
 
 span {
     font-weight: bold;
-    color: #007bff; /* Blue text color */
 }
