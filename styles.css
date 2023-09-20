@@ -73,3 +73,8 @@ p {
 span {
     font-weight: bold;
 }
+
+.results p {
+    font-size: 18px;
+    margin: 5px 0;
+}
