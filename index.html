@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h2>Option Details</h2>
+            <label for="option-type">Option Type (Call / Put):</label>
+            <select id="option-type">
+                <option value="call">Call</option>
+                <option value="put">Put</option>
+            </select>
+            
+            <label for="stock-price">Stock Price:</label>
+            <input type="text" id="stock-price" placeholder="Enter stock price">
+            
+            <label for="strike-price">Strike Price:</label>
+            <input type="text" id="strike-price" placeholder="Enter strike price">
+            
+            <label for="time-to-maturity">Time to Maturity (in years):</label>
+            <input type="text" id="time-to-maturity" placeholder="Enter time to maturity">
+            
+            <label for="volatility">Volatility (percentage - annual):</label>
+            <input type="text" id="volatility" placeholder="Enter volatility">
+            
+            <label for="risk-free-rate">Risk-free Rate (percentage - annual):</label>
+            <input type="text" id="risk-free-rate" placeholder="Enter risk-free rate">
+            
+            <label for="dividend">Dividend (percentage or notional):</label>
+            <input type="text" id="dividend" placeholder="Enter dividend">
+            
+            <label for="pricing-method">Pricing Method:</label>
+            <select id="pricing-method">
+                <option value="Black-Scholes Continuous">Black-Scholes Continuous</option>
+                <option value="Black-Scholes Discrete">Black-Scholes Discrete</option>
+            </select>
+            
+            <button id="calculate-button">Calculate</button>
+        </div>
+        
+        <div class="right-panel">
+            <h2>Option Pricing</h2>
+            <p>Option Price (in percentage): <span id="option-price-percent"></span></p>
+            <p>Option Price (in notional): <span id="option-price-notional"></span></p>
+            
+            <canvas id="greeks-chart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
