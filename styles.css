@@ -7,9 +7,8 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items to the top of the page */
-    min-height: 100vh; /* Set min-height to ensure spacing from the top */
-    padding-top: 20px; /* Add spacing from the top of the page */
+    align-items: center; /* Center both horizontally and vertically */
+    min-height: 100vh;
 }
 
 .calculator {
@@ -19,21 +18,13 @@ body {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    max-width: 800px; /* Increase the max-width for a wider layout */
+    max-width: 400px; /* Adjust the max-width as desired */
     margin: 0 auto;
-    display: flex;
-    flex-direction: row; /* Display inputs and outputs side by side */
 }
 
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
-    width: 100%; /* Full width for the title */
-}
-
-.input-section {
-    flex: 1; /* Inputs take up 50% of the width */
-    padding-right: 20px; /* Add some spacing between inputs and outputs */
 }
 
 .input-group {
@@ -68,12 +59,6 @@ button {
 
 button:hover {
     background-color: #0056b3;
-}
-
-.output-section {
-    flex: 1; /* Outputs take up 50% of the width */
-    text-align: left;
-    padding-left: 20px; /* Add some spacing between inputs and outputs */
 }
 
 .results {
