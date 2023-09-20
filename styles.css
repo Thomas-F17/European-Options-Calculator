@@ -1,20 +1,17 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
 }
 
 .container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border: 1px solid #ccc;
+    background-color: white;
+    margin: 20px;
     padding: 20px;
-    width: 80%;
-    max-width: 800px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -63,23 +60,4 @@ body {
 
 .right-panel p span {
     font-weight: normal;
-}
-
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .left-panel,
-    .right-panel {
-        width: 100%;
-        border: none;
-        padding: 0;
-    }
-
-    .right-panel {
-        border-top: 1px solid #ccc;
-        padding-top: 20px;
-    }
 }
