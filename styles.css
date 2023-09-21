@@ -74,7 +74,13 @@ span {
     font-weight: bold;
 }
 
-.results p {
+.results 
+p {
     font-size: 18px;
     margin: 5px 0;
 }
+
+span {
+    font-weight: bold;
+}
+
