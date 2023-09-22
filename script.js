@@ -58,6 +58,7 @@ function normDist(x) {
     }
 }
 
+// The code for Black-Scholes Discrete is currently not functional - to be fixed
 function calculateBlackScholesDiscrete(optionType, stockPrice, strikePrice, timeToExpiration, volatility, interestRate, dividend) {
     // Calculate Black-Scholes (Discrete) option price, Delta, Gamma, Theta, Vega, and Rho
     const n = Math.floor(timeToExpiration * 365); // Number of time intervals
